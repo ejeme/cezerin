@@ -4,6 +4,7 @@ import PaymentGatewaysService from '../services/settings/paymentGateways';
 import PayPalCheckout from './PayPalCheckout';
 import LiqPay from './LiqPay';
 import StripeElements from './StripeElements';
+import RavePay from './RavePay';
 
 const getOptions = orderId => {
 	return Promise.all([
@@ -37,6 +38,8 @@ const getPaymentFormSettings = orderId => {
 				return LiqPay.getPaymentFormSettings(options);
 			case 'stripe-elements':
 				return StripeElements.getPaymentFormSettings(options);
+			case 'ravepay':
+				return RavePay.getPaymentFormSettings(options);
 			default:
 				return Promise.reject('Invalid gateway');
 		}
@@ -76,6 +79,12 @@ const processOrderPayment = async order => {
 	switch (gateway) {
 		case 'stripe-elements':
 			return StripeElements.processOrderPayment({
+				order,
+				gatewaySettings,
+				settings
+			});
+		case 'ravepay':
+			return RavePay.processOrderPayment({
 				order,
 				gatewaySettings,
 				settings

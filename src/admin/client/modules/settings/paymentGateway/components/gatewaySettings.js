@@ -16,6 +16,8 @@ const GatewaySettings = ({ gateway }) => {
 			return <LiqPay />;
 		case 'stripe-elements':
 			return <StripeElements />;
+		case 'rave':
+			return <Rave />;
 		default:
 			return null;
 	}
@@ -157,6 +159,37 @@ const StripeElements = props => {
 				floatingLabelText="Secret key"
 				fullWidth={true}
 			/>
+		</div>
+	);
+};
+
+const Rave = props => {
+	return (
+		<div>
+			<Field>
+			<Field
+				component={SelectField}
+				name="env"
+				floatingLabelText="Environment"
+				fullWidth={true}
+				autoWidth={true}
+			>
+				<MenuItem value="production" primaryText="production" />
+				<MenuItem value="test" primaryText="test" />
+			</Field>
+			<Field
+				component={TextField}
+				name="public_key"
+				floatingLabelText="Publishable key"
+				fullWidth={true}
+			/>
+			<Field
+				component={TextField}
+				name="secret_key"
+				floatingLabelText="Secret key"
+				fullWidth={true}
+			/>
+			</Field>
 		</div>
 	);
 };

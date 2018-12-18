@@ -3,6 +3,7 @@ import api from '../../../lib/api';
 import PayPalCheckout from './PayPalCheckout';
 import LiqPay from './LiqPay';
 import StripeElements from './StripeElements';
+import RavePay from './RavePay';
 
 export default class PaymentForm extends React.Component {
 	constructor(props) {
@@ -95,6 +96,17 @@ export default class PaymentForm extends React.Component {
 							/>
 						</div>
 					);
+				case 'ravepay':
+					return (
+						<div className="payment-form">
+							<RavePay
+								formSettings={formSettings}
+								shopSettings={shopSettings}
+								onPayment={onPayment}
+							/>
+						</div>
+					);
+	
 				default:
 					return (
 						<div>
