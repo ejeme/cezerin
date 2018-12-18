@@ -17,7 +17,7 @@ const GatewaySettings = ({ gateway }) => {
 		case 'stripe-elements':
 			return <StripeElements />;
 		case 'rave':
-			return <Rave />;
+			return <RavePay />;
 		default:
 			return null;
 	}
@@ -163,10 +163,9 @@ const StripeElements = props => {
 	);
 };
 
-const Rave = props => {
+const RavePay = props => {
 	return (
 		<div>
-			<Field>
 			<Field
 				component={SelectField}
 				name="env"
@@ -189,7 +188,6 @@ const Rave = props => {
 				floatingLabelText="Secret key"
 				fullWidth={true}
 			/>
-			</Field>
 		</div>
 	);
 };
