@@ -45,7 +45,7 @@ import React, { Component } from 'react'
     		        callback={this.callback}
     		        close={this.close}
                     isProduction={false}
-                    tag="button" {/*it can be button or a or input tag */}
+                    tag="button"
     	        />
             </p>
           </div>
