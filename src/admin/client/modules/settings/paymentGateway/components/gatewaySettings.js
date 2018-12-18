@@ -16,7 +16,7 @@ const GatewaySettings = ({ gateway }) => {
 			return <LiqPay />;
 		case 'stripe-elements':
 			return <StripeElements />;
-		case 'rave':
+		case 'ravepay':
 			return <RavePay />;
 		default:
 			return null;

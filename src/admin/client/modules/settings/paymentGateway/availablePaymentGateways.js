@@ -12,7 +12,7 @@ export const AVAILABLE_PAYMENT_GATEWAYS = [
 		name: 'Stripe Elements'
 	},
 	{
-		key: 'rave',
-		name: 'Rave'
+		key: 'ravepay',
+		name: 'RavePay'
 	}
 ];

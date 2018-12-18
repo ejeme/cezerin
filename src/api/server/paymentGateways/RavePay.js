@@ -1,4 +1,4 @@
-import Ravepay from 'ravepay';
+/*import Ravepay from 'ravepay';
 import OrdersService from '../services/orders/orders';
 import OrdertTansactionsService from '../services/orders/orderTransactions';
 
@@ -69,3 +69,4 @@ export default {
 	getPaymentFormSettings,
 	processOrderPayment
 };
+*/
