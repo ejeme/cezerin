@@ -27,24 +27,39 @@ export default class RavePayButton extends React.Component {
 	executeScript = () => {
 		const { formSettings, shopSettings, onPayment } = this.props;
 
-		RavePayCheckout.init({
-			data: formSettings.data,
-			signature: formSettings.signature,
-			language: formSettings.language,
-			embedTo: '#ravepay_checkout',
-			mode: 'embed'
-		})
-			.on('ravepay.callback', function(data) {
-				if (data.status === 'success') {
-					onPayment();
+		document.getElementById('ravepay_checkout').innerHTML = null;
+
+		var x = getpaidSetup(
+			{
+				PBFPubKey: this.props.formSettings.public_key,
+				customer_email: this.props.formSettings.email,
+				amount: this.props.formSettings.amount,
+				currency: 'NGN',
+				txref: 'rave-123456',
+				meta: [
+					{
+						metaname: 'flightID',
+						metavalue: 'AP1234'
+					}
+				],
+				onclose: function() {},
+				callback: function(response) {
+					var txref = response.tx.txRef; // collect txRef returned and pass to a 					server page to complete status check.
+					console.log('This is the response returned after a charge', response);
+					if (
+						response.tx.chargeResponseCode == '00' ||
+						response.tx.chargeResponseCode == '0'
+					) {
+						// redirect to a success page
+					} else {
+						// redirect to a failure page.
+					}
+
+					x.close(); // use this to close the modal immediately after payment.
 				}
-			})
-			.on('ravepay.ready', function(data) {
-				// ready
-			})
-			.on('ravepay.close', function(data) {
-				// close
-			});
+			},
+			'#ravepay_checkout'
+		);
 	};
 
 	componentDidMount() {
