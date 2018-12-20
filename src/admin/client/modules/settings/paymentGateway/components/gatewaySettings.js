@@ -173,7 +173,7 @@ const RavePay = props => {
 				fullWidth={true}
 				autoWidth={true}
 			>
-				<MenuItem value="production" primaryText="production" />
+				<MenuItem value="live" primaryText="live" />
 				<MenuItem value="test" primaryText="test" />
 			</Field>
 			<Field
