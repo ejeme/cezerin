@@ -12,7 +12,8 @@ export default class RavePayButton extends React.Component {
 			return;
 		}
 
-		const SCRIPT_URL = 'https://rave-api-v2.herokuapp.com/flwv3-pug/getpaidx/api/flwpbf-inline.js';
+		const SCRIPT_URL =
+			'https://ravesandboxapi.flutterwave.com/flwv3-pug/getpaidx/api/flwpbf-inline.js';
 		const container = document.body || document.head;
 		const script = document.createElement('script');
 		script.src = SCRIPT_URL;
