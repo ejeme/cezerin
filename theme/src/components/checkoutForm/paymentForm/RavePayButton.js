@@ -29,7 +29,7 @@ export default class RavePayButton extends React.Component {
 
 		document.getElementById('ravepay_checkout').innerHTML = null;
 
-		var x = getpaidSetup.init(
+		var x = getpaidSetup(
 			{
 				data: formSettings.data,
 				PBFPubKey: 'FLWPUBK-94c0882671b76bd075c8da580f4acbd9-X',
