@@ -41,6 +41,7 @@ export default class RavePayButton extends React.Component {
 				callback: function(response) {
 					var txref = response.tx.txRef; // collect txRef returned and pass to a 					server page to complete status check.
 					console.log('This is the response returned after a charge', response);
+
 					if (
 						response.tx.chargeResponseCode == '00' ||
 						response.tx.chargeResponseCode == '0'
