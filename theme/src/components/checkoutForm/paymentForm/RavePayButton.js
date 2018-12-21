@@ -29,20 +29,21 @@ export default class RavePayButton extends React.Component {
 
 		document.getElementById('ravepay_checkout').innerHTML = null;
 
-		var x = getpaidSetup(
+		var x = getpaidSetup.init(
 			{
+				data: formSettings.data,
 				PBFPubKey: 'FLWPUBK-94c0882671b76bd075c8da580f4acbd9-X',
 				customer_email: 'tomijogun@yahoo.com',
 				amount: 1000,
 				txref: 'rave-123456',
-				onclose: function() {},
-				callback: function(response) {
-					var txref = response.tx.txRef; // collect txRef returned and pass to a 					server page to complete status check.
+				onclose: function(data) {},
+				callback: function(data) {
+					var txref = data.tx.txRef; // collect txRef returned and pass to a 					server page to complete status check.
 					console.log('This is the response returned after a charge', response);
 
 					if (
-						response.tx.chargeResponseCode == '00' ||
-						response.tx.chargeResponseCode == '0'
+						data.tx.chargeResponseCode == '00' ||
+						data.tx.chargeResponseCode == '0'
 					) {
 						// redirect to a success page
 					} else {

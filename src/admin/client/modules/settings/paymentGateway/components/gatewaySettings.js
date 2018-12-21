@@ -174,7 +174,7 @@ const RavePayButton = props => {
 				autoWidth={true}
 			>
 				<MenuItem value="live" primaryText="live" />
-				<MenuItem value="test" primaryText="test" />
+				<MenuItem value="sandbox" primaryText="sandbox" />
 			</Field>
 			<Field
 				component={TextField}
