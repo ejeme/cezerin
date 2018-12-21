@@ -4,7 +4,7 @@ import PaymentGatewaysService from '../services/settings/paymentGateways';
 import PayPalCheckout from './PayPalCheckout';
 import LiqPay from './LiqPay';
 import StripeElements from './StripeElements';
-import RavePay from './RavePayBtn';
+import RavePay from './RavePay';
 
 const getOptions = orderId => {
 	return Promise.all([
