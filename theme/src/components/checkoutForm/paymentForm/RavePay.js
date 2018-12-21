@@ -44,8 +44,10 @@ export default class RavePayButton extends React.Component {
 						response.tx.chargeResponseCode == '00' ||
 						response.tx.chargeResponseCode == '0'
 					) {
+						onPayment();
 						// redirect to a success page
 					} else {
+						throw err;
 						// redirect to a failure page.
 					}
 
