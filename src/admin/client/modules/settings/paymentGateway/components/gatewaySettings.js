@@ -17,7 +17,7 @@ const GatewaySettings = ({ gateway }) => {
 		case 'stripe-elements':
 			return <StripeElements />;
 		case 'ravepay':
-			return <RavePay />;
+			return <RavePayButton />;
 		default:
 			return null;
 	}
@@ -163,7 +163,7 @@ const StripeElements = props => {
 	);
 };
 
-const RavePay = props => {
+const RavePayButton = props => {
 	return (
 		<div>
 			<Field

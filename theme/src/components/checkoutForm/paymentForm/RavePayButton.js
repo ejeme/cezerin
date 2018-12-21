@@ -34,14 +34,7 @@ export default class RavePayButton extends React.Component {
 				PBFPubKey: this.props.formSettings.public_key,
 				customer_email: this.props.formSettings.email,
 				amount: this.props.formSettings.amount,
-				currency: 'NGN',
-				txref: 'rave-123456',
-				meta: [
-					{
-						metaname: 'flightID',
-						metavalue: 'AP1234'
-					}
-				],
+
 				onclose: function() {},
 				callback: function(response) {
 					var txref = response.tx.txRef; // collect txRef returned and pass to a 					server page to complete status check.
