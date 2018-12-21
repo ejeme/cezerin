@@ -3,7 +3,7 @@ import api from '../../../lib/api';
 import PayPalCheckout from './PayPalCheckout';
 import LiqPay from './LiqPay';
 import StripeElements from './StripeElements';
-import RavePay from './RavePay';
+import RavePayButton from './RavePayButton';
 
 export default class PaymentForm extends React.Component {
 	constructor(props) {
