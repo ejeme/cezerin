@@ -1,94 +1,61 @@
-import crypto from 'crypto';
+import stripePackage from 'stripe';
 import OrdersService from '../services/orders/orders';
 import OrdertTansactionsService from '../services/orders/orderTransactions';
 
 const getPaymentFormSettings = options => {
 	const { gateway, gatewaySettings, order, amount, currency } = options;
-	const params = {
-		live: '0',
-		action: 'pay',
-		version: '3',
-		amount: amount,
-		currency: currency,
-		description: 'Order: ' + order.number,
-		order_id: order.id,
-		public_key: gatewaySettings.public_key,
-		language: gatewaySettings.language,
-		server_url: gatewaySettings.server_url
-	};
-
-	const form = getForm(params, gatewaySettings.private_key);
-
 	const formSettings = {
-		data: form.data,
-		signature: form.signature,
-		language: gatewaySettings.language
+		order_id: order.id,
+		amount,
+		currency,
+		email: order.email,
+		public_key: gatewaySettings.public_key
 	};
-
 	return Promise.resolve(formSettings);
 };
 
-const paymentNotification = options => {
-	const { gateway, gatewaySettings, req, res } = options;
-	const params = req.body;
-	const dataStr = Buffer.from(params.data, 'base64').toString();
-	const data = JSON.parse(dataStr);
-
-	res.status(200).end();
-
-	const sign = getHashFromString(
-		gatewaySettings.private_key + params.data + gatewaySettings.private_key
-	);
-	const signatureValid = sign === params.signature;
-	const paymentSuccess = data.status === 'success';
-	const orderId = data.order_id;
-
-	if (signatureValid && paymentSuccess) {
-		OrdersService.updateOrder(orderId, {
-			paid: true,
-			date_paid: new Date()
-		}).then(() => {
-			OrdertTansactionsService.addTransaction(orderId, {
-				transaction_id: data.transaction_id,
-				amount: data.amount,
-				currency: data.currency,
-				status: data.status,
-				details: `${data.paytype}, ${data.sender_card_mask2}`,
-				success: true
-			});
+const processOrderPayment = async ({ order, gatewaySettings, settings }) => {
+	try {
+		const stripe = stripePackage(gatewaySettings.secret_key);
+		const charge = await stripe.charges.create({
+			amount: order.grand_total * 100,
+			currency: settings.currency_code,
+			description: `Order #${order.number}`,
+			statement_descriptor: `Order #${order.number}`,
+			metadata: {
+				order_id: order.id
+			},
+			source: order.payment_token
 		});
-	} else {
-		// log
+
+		// status: succeeded, pending, failed
+		const paymentSucceeded =
+			charge.status === 'succeeded' || charge.paid === true;
+
+		if (paymentSucceeded) {
+			await OrdersService.updateOrder(order.id, {
+				paid: true,
+				date_paid: new Date()
+			});
+		}
+
+		await OrdertTansactionsService.addTransaction(order.id, {
+			transaction_id: charge.id,
+			amount: charge.amount / 100,
+			currency: charge.currency,
+			status: charge.status,
+			details: charge.outcome.seller_message,
+			success: paymentSucceeded
+		});
+
+		return paymentSucceeded;
+	} catch (err) {
+		// handle errors
+		return false;
 	}
 };
 
-const getForm = (params, private_key) => {
-	params = getFormParams(params);
-	let data = new Buffer(JSON.stringify(params)).toString('base64');
-	let signature = getHashFromString(private_key + data + private_key);
-
-	return {
-		data: data,
-		signature: signature
-	};
-};
-
-const getFormParams = params => {
-	if (!params.version) throw new Error('version is null');
-	if (!params.amount) throw new Error('amount is null');
-	if (!params.currency) throw new Error('currency is null');
-	if (!params.description) throw new Error('description is null');
-
-	return params;
-};
-
-const getHashFromString = str => {
-	let sha1 = crypto.createHash('sha1');
-	sha1.update(str);
-	return sha1.digest('base64');
-};
-
 export default {
-	getPaymentFormSettings: getPaymentFormSettings,
-	paymentNotification: paymentNotification
+	getPaymentFormSettings,
+	processOrderPayment
 };
