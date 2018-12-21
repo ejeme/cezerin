@@ -31,19 +31,18 @@ export default class RavePayButton extends React.Component {
 
 		var x = getpaidSetup(
 			{
-				data: formSettings.data,
-				PBFPubKey: formSettings.gatewaySettings.public_key,
-				customer_email: formSettings.gatewaySettings.order.email,
-				amount: formSettings.gatewaySettings.amount,
-				txref: formSettings.gatewaySettings.order.id,
-				onclose: function(data) {},
-				callback: function(data) {
-					var txref = data.tx.txRef; // collect txRef returned and pass to a 					server page to complete status check.
+				PBFPubKey: formSettings.public_key,
+				customer_email: formSettings.order.email,
+				amount: formSettings.amount,
+				txref: formSettings.order.id,
+				onclose: function() {},
+				callback: function(response) {
+					var txref = response.tx.txRef; // collect txRef returned and pass to a 					server page to complete status check.
 					console.log('This is the response returned after a charge', response);
 
 					if (
-						data.tx.chargeResponseCode == '00' ||
-						data.tx.chargeResponseCode == '0'
+						response.tx.chargeResponseCode == '00' ||
+						response.tx.chargeResponseCode == '0'
 					) {
 						// redirect to a success page
 					} else {
