@@ -32,7 +32,7 @@ export default class RavePayButton extends React.Component {
 		var x = getpaidSetup(
 			{
 				PBFPubKey: formSettings.public_key,
-				customer_email: formSettings.order.email,
+				//customer_email: formSettings.order.email,
 				amount: formSettings.amount,
 				txref: formSettings.order.id,
 				onclose: function() {},
