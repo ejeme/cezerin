@@ -1,4 +1,4 @@
-/*import stripePackage from 'stripe';
+import Ravepay from 'ravepay';
 import OrdersService from '../services/orders/orders';
 import OrdertTansactionsService from '../services/orders/orderTransactions';
 
@@ -16,8 +16,12 @@ const getPaymentFormSettings = options => {
 
 const processOrderPayment = async ({ order, gatewaySettings, settings }) => {
 	try {
-		const stripe = stripePackage(gatewaySettings.secret_key);
-		const charge = await stripe.charges.create({
+		const rave = Ravepay(
+			gatewaySettings.public_key,
+			gatewaySettings.secret_key,
+			PRODUCTION_FLAG
+		);
+		const charge = await rave.Card.charge({
 			amount: order.grand_total * 100,
 			currency: settings.currency_code,
 			description: `Order #${order.number}`,
@@ -26,11 +30,26 @@ const processOrderPayment = async ({ order, gatewaySettings, settings }) => {
 				order_id: order.id
 			},
 			source: order.payment_token
-		});
+		})
+			.then(resp => {})
+			.catch(err => {});
 
 		// status: succeeded, pending, failed
+		var payload = {
+			//From the Rave website
+			PBFPubKey: gatewaySettings.public_key,
+			transaction_reference: ref,
+			otp: ''
+		};
+		rave.Card.validate(payload)
+			.then(resp => {
+				//From the Rave Website
+				return resp.body;
+			})
+			.catch(err => {});
+
 		const paymentSucceeded =
-			charge.status === 'succeeded' || charge.paid === true;
+			charge.status === 'succeeded' || resp.body === true;
 
 		if (paymentSucceeded) {
 			await OrdersService.updateOrder(order.id, {
@@ -59,4 +78,3 @@ export default {
 	getPaymentFormSettings,
 	processOrderPayment
 };
-*/
