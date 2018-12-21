@@ -99,7 +99,7 @@ export default class PaymentForm extends React.Component {
 				case 'ravepay':
 					return (
 						<div className="payment-form">
-							<RavePay
+							<RavePayButton
 								formSettings={formSettings}
 								shopSettings={shopSettings}
 								onPayment={onPayment}
