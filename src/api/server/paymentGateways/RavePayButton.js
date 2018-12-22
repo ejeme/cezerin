@@ -9,14 +9,14 @@ const REGULAR_URL = 'www.rave.flutterwave.com';
 const getPaymentFormSettings = options => {
 	const { gateway, gatewaySettings, order, amount, currency } = options;
 	const formSettings = {
-		txref: order.id,
+		order_id: order.id,
 		amount: amount,
 		currency: currency,
 		env: gatewaySettings.env,
 		customer: gatewaySettings.client,
-		customer_email: order.email,
-		PBFPubKey: gatewaySettings.public_key,
-		redirectUrl: gatewaySettings.notify_url
+		email: order.email,
+		public_key: gatewaySettings.public_key,
+		notify_url: gatewaySettings.notify_url
 	};
 	return Promise.resolve(formSettings);
 };
